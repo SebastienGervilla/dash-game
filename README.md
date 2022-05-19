@@ -10,7 +10,9 @@ and built with the library Pygame.
 
 -> Make sure you installed Pygame module :
 
-`pip install pygame`
+```
+pip install pygame
+```
 
 -> run main.py
 
