@@ -1,6 +1,7 @@
 import json
 from objects.block import Block
 from objects.spike import Spike
+from objects.end import End
 from math import ceil
 
 import pygame
@@ -76,6 +77,8 @@ class Player(pygame.sprite.Sprite):
                 if isinstance(p, Spike):
                     if self.rect.colliderect(p.hitbox):
                         self.is_dead = True
+                if isinstance(p, End):
+                    self.has_won = True
 
     def calculateAngle(self):
         if not self.on_ground:

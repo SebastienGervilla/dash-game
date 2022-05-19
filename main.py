@@ -3,7 +3,7 @@ from game import Game
 from level import Level
 from player import Player
 WIDTH, HEIGHT = 1000, 500
-STARTING_POS = (100, 100)
+STARTING_POS = (100, 100)    
 PLAYER_SIZE = (32, 32)
 
 def main():

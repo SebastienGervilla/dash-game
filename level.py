@@ -4,6 +4,7 @@ from objects.gameElements import GameElement
 from player import Player
 from objects.block import Block
 from objects.spike import Spike
+from objects.end import End
 
 class Level():
 
@@ -25,6 +26,8 @@ class Level():
                     Block(self.image_set["block"], (x , y) , self.objects)
                 elif col == "1":
                     Spike(self.image_set["spike"], (x , y) , self.objects)
+                elif col == "2":
+                    End(self.image_set["end"], (x , y) , self.objects)
                 x += 32
             y -= 32
             x = 0
@@ -41,7 +44,8 @@ class Level():
     def update(self):
         self.player.update(self.objects)
         if self.player.getOutcome()[0]:
-            pass
+            print("-------------------\nYou Won\n-------------------")
+            quit()
         if self.player.getOutcome()[1]:
             print("-------------------\nYou lost\n-------------------")
             quit()

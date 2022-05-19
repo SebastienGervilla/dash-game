@@ -14,6 +14,7 @@ class ImageManager():
         self.image_set["player"] = pygame.image.load(os.path.join("assets", "avatar.png"))
         self.image_set["block"] = pygame.image.load(os.path.join("assets", "block.png"))
         self.image_set["spike"] = pygame.image.load(os.path.join("assets", "spike.png"))
+        self.image_set["end"] = pygame.image.load(os.path.join("assets", "endblock.png"))
 
         if self.image_set == NULL:
             return
