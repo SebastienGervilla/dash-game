@@ -1,8 +1,8 @@
 import json
 from objects.block import Block
 from objects.spike import Spike
+from objects.orb import Orb
 from objects.end import End
-from math import ceil
 
 import pygame
 SETTINGS = json.load(open('settings.json'))
@@ -60,6 +60,8 @@ class Player(pygame.sprite.Sprite):
     def collide(self, vel: int, platforms: pygame.sprite.Group):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
+                if isinstance(p, Orb):
+                    self.jump() #add orbs
                 if isinstance(p, Block):
                     if vel > 0:
                         self.rect.bottom = p.rect.top

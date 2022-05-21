@@ -14,6 +14,7 @@ class Game():
     def run(self):
         pygame.init()
         self.screen = pygame.display.set_mode(self.screen_size)
+        pygame.display.set_caption('Dash Game')
         self.is_running = True
         while (self.is_running):
             for event in pygame.event.get():
