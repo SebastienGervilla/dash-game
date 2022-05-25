@@ -1,51 +1,30 @@
 import pygame
-from level import Level
+from state_handler import StateHandler
 
-from objects.spike import Spike
 class Game():
 
-    def __init__(self, level: Level, screen_size: tuple, game_size: tuple) -> None:
-        self.screen_size = screen_size
-        self.game_size = game_size
-        self.speed = 5
-        self.clock = pygame.time.Clock()
-        self.level = level
+    def __init__(self, screen_size: tuple, game_size: tuple):
+        self.setScreen(screen_size)
+        self.state_handler = StateHandler()
 
-    def run(self):
-        pygame.init()
-        self.screen = pygame.display.set_mode(self.screen_size)
-        pygame.display.set_caption('Dash Game')
+        self.game_size = game_size
         self.is_running = True
-        while (self.is_running):
-            for event in pygame.event.get():
-                if (event.type == pygame.QUIT):
-                    self.is_running = False
-            self.handleInputs()
-            self.update()
-            self.draw()
-            pygame.display.flip()
-            self.clock.tick(60)
-        pygame.quit()
+
+    def setScreen(self, screen_size: tuple):
+        self.screen = pygame.display.set_mode(screen_size)
+        pygame.display.set_caption('Dash Game')
 
     def handleInputs(self):
-        keys = pygame.key.get_pressed()
-        if (keys[pygame.K_SPACE]):
-            self.level.player.jump()
+        self.state_handler.handleInputs()
 
     def update(self):
-        self.level.update()
+        self.is_running = self.state_handler.getIsRunning()
+        self.state_handler.update()
 
     def draw(self):
-        self.screen.blit(self.level.image_set["bg"], (0, 0))
-        # self.screen.fill((255, 255, 255))
-        self.level.getObjects().draw(self.screen)
-        self.rotatePlayer(self.level.player.getAngle())
-        # self.level.player.getPlayerGroup().draw(self.screen)
+        self.screen.fill((255, 255, 255))
+        self.state_handler.draw(self.screen)
+        pygame.display.flip()
 
-    def rotatePlayer(self, angle: float):
-        player_surf = self.level.player.getPlayerGroup().sprites()[0]
-        player_img = player_surf.image
-        player_tl = player_surf.rect.topleft
-        rotated_image = pygame.transform.rotate(player_img, angle)
-        new_rect = rotated_image.get_rect(center = player_img.get_rect(topleft=player_tl).center)
-        self.screen.blit(rotated_image, new_rect)
+    def getIsRunning(self):
+        return self.is_running
