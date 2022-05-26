@@ -31,9 +31,8 @@ class GameState():
             objects: list[GameElement]
             for object in objects: 
                 object.draw(screen)
-                # pygame.draw.rect(screen, (255, 0, 0), object.hitbox)
 
-    def setNextState(self, next_state: GameState):
+    def setNextState(self, next_state: str):
         self.next_state = next_state
 
     def getNextState(self):

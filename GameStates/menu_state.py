@@ -1,6 +1,5 @@
 import pygame
 from GameStates.game_state import GameState
-from GameStates.play_state import PlayState
 from Menus.main_menu import MainMenu
 
 class MenuState(GameState): #Clear objects
@@ -26,7 +25,7 @@ class MenuState(GameState): #Clear objects
 
     def setNextState(self, button_name: str):
         if button_name == "play":
-            super().setNextState(PlayState())
+            super().setNextState("playstate")
         elif button_name == "level":
             print("----- Working In Progress -----")
         elif button_name == "quit":

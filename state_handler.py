@@ -8,19 +8,31 @@ class StateHandler():
 
     def __init__(self):
         self.is_running = True
+        self.curr_state_str = "menustate"
         self.curr_state = MenuState()
         self.curr_state.onEnter()
 
-    def changeGameState(self, game_state: GameState):
-        if isinstance(game_state, type(self.curr_state)):
+    def changeGameState(self, game_state: str):
+        if game_state == self.curr_state_str:
             return
         
         self.curr_state.onExit()
         del self.curr_state
 
-        self.curr_state = game_state
+        self.curr_state_str = game_state
+        self.curr_state = self.getCurrentState()
+
         self.curr_state.onEnter()
         print("State changed...")
+
+    def getCurrentState(self):
+        if self.curr_state_str == "playstate":
+            curr_state = PlayState()
+        elif self.curr_state_str == "menustate":
+            curr_state = MenuState()
+        else: 
+            curr_state = MenuState()
+        return curr_state
 
     def handleInputs(self):
         self.curr_state.handleInputs()

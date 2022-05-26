@@ -31,7 +31,7 @@ class Player(GameElement):
     def move(self):
         self.velocity[1] -= self.jump_height
 
-    def update(self, platforms: pygame.sprite.Group):
+    def update(self, platforms: list[GameElement]):
         if self.is_jumping:
             if self.on_ground:
                 self.move()
@@ -56,7 +56,7 @@ class Player(GameElement):
         self.rotatePlayer()
         self.pos = [self.rect.x, self.rect.y]
 
-    def collide(self, vel: int, platforms: pygame.sprite.Group):
+    def collide(self, vel: int, platforms: list[GameElement]):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
                 if isinstance(p, Orb):
@@ -99,6 +99,9 @@ class Player(GameElement):
         self.rotated_img = pygame.transform.rotate(self.base_img, self.angle)
         self.rotated_rect = self.rotated_img.get_rect(center = self.image.get_rect(topleft=self.pos).center)
 
+    def setVel(self, vel: tuple):
+        self.velocity = list(vel)
+
     def draw(self, screen: pygame.Surface):
         screen.blit(self.rotated_img, self.rotated_rect)
 
@@ -110,12 +113,6 @@ class Player(GameElement):
 
     def getVel(self):
         return self.velocity
-
-    def getAngle(self):
-        return self.angle
-
-    def getPlayerGroup(self):
-        return self.player_sprite
 
     def getOutcome(self):
         return (self.has_won, self.is_dead)

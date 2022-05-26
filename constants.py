@@ -7,4 +7,5 @@ GAME_SIZE = SCREEN_SIZE
 # Game Properties
 
 DEFAULT_SIZE = (32, 32)
+DEFAULT_VEL = (5.3, 0)
 GRAVITY = 1

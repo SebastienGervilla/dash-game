@@ -1,4 +1,4 @@
-from constants import DEFAULT_SIZE
+from constants import DEFAULT_SIZE, DEFAULT_VEL
 import csv
 import os
 import pygame
@@ -7,6 +7,7 @@ from Objects.GameElements.player import Player
 from Objects.GameElements.block import Block
 from Objects.GameElements.spike import Spike
 from Objects.GameElements.end import End
+from Objects.UI.game_button import GameButton
 
 class Level():
 
@@ -15,6 +16,7 @@ class Level():
         self.game_size = game_size
         self.state_objs = state_objs
         self.curr_lvl = 1
+        self.button_clicked = None
 
         self.generateMap()
         self.setLevel()
@@ -46,15 +48,33 @@ class Level():
             y -= 32
             x = 0
 
+        self.state_objs["buttons"] = []
+        self.state_objs["buttons"].append(GameButton((20, 20), DEFAULT_SIZE, "pausebutton.png", "pause"))
+
     def setPlayer(self):
         self.state_objs["player"] = []
         start_pos = (self.game_size[0] / 2 - DEFAULT_SIZE[0] / 2, self.game_size[1] - DEFAULT_SIZE[1])
-        self.player = Player((6, 0), start_pos, "avatar.png")
+        self.player = Player(DEFAULT_VEL, start_pos, "avatar.png")
         self.state_objs["player"].append(self.player)
 
     def setBgImage(self):
         background_name = "level" + str(self.curr_lvl) + ".png"
         self.bg_img = pygame.image.load(os.path.join("assets\\images\\Backgrounds", background_name))
+
+    def handleInputs(self, events: list[pygame.event.Event]):
+        keys = pygame.key.get_pressed()
+        if (keys[pygame.K_SPACE]):
+            self.player.jump()
+        
+        for event in events:
+            if (event.type == pygame.MOUSEBUTTONDOWN):
+                self.checkIsPressed(pygame.mouse.get_pos())
+            elif (event.type == pygame.MOUSEBUTTONUP):
+                button_clicked = self.checkForClick(pygame.mouse.get_pos())
+                if button_clicked != None: 
+                    self.button_clicked = button_clicked
+            elif (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
+                self.button_clicked = "pause"
 
     def update(self):
         for object in self.state_objs["platforms"]:
@@ -63,9 +83,23 @@ class Level():
 
         self.player.update(self.state_objs["platforms"])
 
-        if self.player.getOutcome()[0]:
-            print("-------------------\nYou Won\n-------------------")
-            quit()
-        if self.player.getOutcome()[1]:
-            print("-------------------\nYou lost\n-------------------")
-            quit()
+    def checkIsPressed(self, mouse_pos: tuple):
+        for object in self.state_objs["buttons"]:
+            object: GameButton
+            object.checkIsPressed(mouse_pos)
+
+    def checkForClick(self, mouse_pos: tuple):
+        for object in self.state_objs["buttons"]:
+            object: GameButton
+            if object.getCollision(mouse_pos) and object.is_pressed:
+                return object.name
+        return None
+
+    def getButtonClicked(self):
+        return self.button_clicked
+
+    def clear(self):
+        self.state_objs.clear()
+
+    def __del__(self):
+        self.clear()
